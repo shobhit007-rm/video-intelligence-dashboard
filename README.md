@@ -68,3 +68,7 @@ To remove a job, close the dashboard and delete its folder in `jobs\`.
 - Transcription runs on the CPU (WhisperX needs an NVIDIA GPU for acceleration), so a 20-minute video takes roughly 10–30 minutes.
 - Frames are still images. Neither the dashboard nor an AI reading the brief can hear music, sound effects or tone of voice.
 - Downloading YouTube videos may break YouTube's Terms of Service. Use the tool for private research only and don't redistribute the downloaded files.
+
+## License
+
+[MIT](LICENSE). The license covers this repository's code only. FFmpeg, yt-dlp, WhisperX and PySceneDetect keep their own licenses.
