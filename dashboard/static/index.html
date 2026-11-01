@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Intelligence</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"></span>
+    <div>
+      <h1>Video Intelligence</h1>
+      <p>Competitor video pipeline · runs on this laptop · free</p>
+    </div>
+  </div>
+  <div class="sys">
+    <div class="meter" id="m-cpu"><span>CPU</span><div class="bar"><i></i></div><b>–</b></div>
+    <div class="meter" id="m-ram"><span>RAM</span><div class="bar"><i></i></div><b>–</b></div>
+    <div class="stat" id="m-disk"><span>Disk free</span><b>–</b></div>
+    <div class="tools" id="tools"></div>
+    <span class="live off" id="live"><i></i><span>Live</span></span>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="side">
+    <form id="new-job" class="card form">
+      <h2>New analysis</h2>
+      <label for="url">YouTube link</label>
+      <input id="url" type="url" placeholder="https://www.youtube.com/watch?v=…" required autocomplete="off" spellcheck="false">
+      <div class="row">
+        <div>
+          <label for="model">Whisper model</label>
+          <select id="model">
+            <option value="tiny">tiny · fastest</option>
+            <option value="base" selected>base · fast</option>
+            <option value="small">small · better Hindi</option>
+            <option value="medium">medium · slow, best</option>
+          </select>
+        </div>
+        <div>
+          <label for="lang">Speech language</label>
+          <select id="lang">
+            <option value="auto">Auto-detect</option>
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn primary" id="submit">Analyse video</button>
+      <p class="form-msg" id="form-msg" role="status"></p>
+    </form>
+    <div class="side-head"><h2>Jobs</h2><span id="job-count"></span></div>
+    <ul id="jobs" class="jobs"></ul>
+  </aside>
+
+  <main>
+    <div class="empty" id="empty">
+      <div class="flow" aria-hidden="true">
+        <span>YouTube</span><span>yt-dlp</span><span>PySceneDetect</span><span>WhisperX</span><span>FFmpeg</span><span>Claude</span>
+      </div>
+      <h2>Paste a competitor video to start</h2>
+      <p>Each video is downloaded, cut into scenes, transcribed with word timings and sampled into frames, all on this laptop. When it finishes you get the numbers here and a brief that Claude can read for the full breakdown.</p>
+    </div>
+
+    <section id="detail" hidden>
+      <div class="card job-head">
+        <img id="d-thumb" alt="" hidden>
+        <div class="job-title">
+          <h2 id="d-title"></h2>
+          <p id="d-sub" class="muted"></p>
+          <a id="d-url" target="_blank" rel="noopener noreferrer"></a>
+        </div>
+        <div class="actions">
+          <span class="badge" id="d-state"></span>
+          <button class="btn" id="b-cancel" hidden>Cancel</button>
+          <button class="btn" id="b-retry" hidden>Run again</button>
+          <button class="btn" id="b-open">Open folder</button>
+          <button class="btn primary" id="b-prompt" hidden>Copy Claude prompt</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Pipeline</h3>
+          <span class="muted" id="d-elapsed"></span>
+        </div>
+        <div class="overall"><i id="d-overall"></i></div>
+        <ol class="stages" id="d-stages"></ol>
+        <p class="error" id="d-error" hidden></p>
+        <details id="d-logbox">
+          <summary>Live log</summary>
+          <pre id="d-log"></pre>
+        </details>
+      </div>
+
+      <div id="results" hidden>
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid2 media">
+          <div class="card player">
+            <video id="player" controls preload="metadata"></video>
+            <p class="now" id="now"></p>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3>Transcript</h3><span class="muted" id="t-lang"></span></div>
+            <ol class="transcript" id="transcript"></ol>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Scene timeline</h3>
+            <span class="legend"><i class="fast"></i>under 2s <i class="mid"></i>2–5s <i class="slow"></i>over 5s</span>
+          </div>
+          <div class="timeline" id="timeline"></div>
+          <div class="axis" id="axis"></div>
+        </div>
+
+        <div class="grid2">
+          <div class="card"><div class="card-head"><h3>Cuts per minute</h3><span class="muted">pacing over time</span></div><div class="bars" id="chart-cuts"></div></div>
+          <div class="card"><div class="card-head"><h3>Words per minute</h3><span class="muted">narration density</span></div><div class="bars words" id="chart-words"></div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3 id="hook-title">Hook</h3><span class="muted" id="hook-sum"></span></div>
+          <p class="hook-text" id="hook-text"></p>
+          <div class="strip" id="hook-strip"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>Scenes</h3><span class="muted" id="scene-count"></span></div>
+          <div class="scenes" id="scenes"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

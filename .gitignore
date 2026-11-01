@@ -1,0 +1,10 @@
+# Local Python environment (contains machine-specific paths)
+.venv/
+
+# Downloaded videos, transcripts and reports - private research data
+jobs/
+
+__pycache__/
+*.pyc
+*.log
+*.tmp
